@@ -1,0 +1,28 @@
+{
+  "participants": [
+    {
+      "name": "Maya Chen"
+    },
+    {
+      "name": "Aarav Sharma"
+    }
+  ],
+  "title": "Maya Chen",
+  "thread_path": "inbox/mayachen_1234567890",
+  "messages": [
+    {
+      "sender_name": "Aarav Sharma",
+      "timestamp_ms": 1767600000000,
+      "content": "happy new year!! \u00f0\u009f\u008e\u0089"
+    },
+    {
+      "sender_name": "Maya Chen",
+      "timestamp_ms": 1767596400000,
+      "photos": [
+        {
+          "uri": "photo.jpg"
+        }
+      ]
+    }
+  ]
+}

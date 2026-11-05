@@ -1,0 +1,41 @@
+{
+  "participants": [
+    {
+      "name": "Maya Chen"
+    },
+    {
+      "name": "Aarav Sharma"
+    }
+  ],
+  "title": "Maya Chen",
+  "thread_path": "inbox/mayachen_1234567890",
+  "messages": [
+    {
+      "sender_name": "Maya Chen",
+      "timestamp_ms": 1772445900000,
+      "content": "haha that reel \u00f0\u009f\u0098\u0082\u00f0\u009f\u0098\u0082"
+    },
+    {
+      "sender_name": "Aarav Sharma",
+      "timestamp_ms": 1772445660000,
+      "content": "dekh ye \u00f0\u009f\u0091\u0080"
+    },
+    {
+      "sender_name": "Aarav Sharma",
+      "timestamp_ms": 1772445600000,
+      "share": {
+        "link": "https://www.instagram.com/reel/abc/"
+      }
+    },
+    {
+      "sender_name": "Maya Chen",
+      "timestamp_ms": 1772355600000,
+      "content": "Reacted \u00f0\u009f\u0098\u0082 to your message "
+    },
+    {
+      "sender_name": "Maya Chen",
+      "timestamp_ms": 1772319600000,
+      "content": "\u00e0\u00a4\u00a8\u00e0\u00a4\u00ae\u00e0\u00a4\u00b8\u00e0\u00a5\u008d\u00e0\u00a4\u00a4\u00e0\u00a5\u0087! \u00e0\u00a4\u0095\u00e0\u00a5\u0088\u00e0\u00a4\u00b8\u00e0\u00a5\u0087 \u00e0\u00a4\u00b9\u00e0\u00a5\u008b?"
+    }
+  ]
+}

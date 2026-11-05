@@ -1,0 +1,18 @@
+{
+  "participants": [
+    {
+      "name": "Spam Bot"
+    },
+    {
+      "name": "Aarav Sharma"
+    }
+  ],
+  "title": "Spam Bot",
+  "messages": [
+    {
+      "sender_name": "Spam Bot",
+      "timestamp_ms": 1777636800000,
+      "content": "win money"
+    }
+  ]
+}

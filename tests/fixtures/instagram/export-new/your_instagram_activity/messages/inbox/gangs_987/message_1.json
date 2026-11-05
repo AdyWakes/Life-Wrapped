@@ -1,0 +1,38 @@
+{
+  "participants": [
+    {
+      "name": "Aarav Sharma"
+    },
+    {
+      "name": "Kabir Singh"
+    },
+    {
+      "name": "Zoe Park"
+    }
+  ],
+  "title": "the gang \u00f0\u009f\u0094\u00a5",
+  "messages": [
+    {
+      "sender_name": "Kabir Singh",
+      "timestamp_ms": 1775044800000,
+      "content": "Kabir Singh named the group the gang \u00f0\u009f\u0094\u00a5."
+    },
+    {
+      "sender_name": "Zoe Park",
+      "timestamp_ms": 1775131200000,
+      "content": "yo"
+    },
+    {
+      "sender_name": "Aarav Sharma",
+      "timestamp_ms": 1775217600000,
+      "content": "call?",
+      "call_duration": 0
+    },
+    {
+      "sender_name": "Aarav Sharma",
+      "timestamp_ms": 1775221200000,
+      "content": "sup",
+      "is_unsent": false
+    }
+  ]
+}
