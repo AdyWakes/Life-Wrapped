@@ -52,6 +52,7 @@ const dist = join(root, 'dist');
 if (existsSync(dist)) {
   const allow = [
     'https://github.com/AdyWakes/Life-Wrapped',
+    'https://adywakes.github.io/Life-Wrapped/', // og:image / og:url meta, read by link-preview crawlers only
     'http://www.w3.org/',
     'https://www.w3.org/',
     'http://www.w3.org',

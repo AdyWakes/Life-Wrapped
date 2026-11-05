@@ -7,9 +7,10 @@
 - Phase 4: parser Web Worker + promise client, landing (drop zone, folder picker, how-to-export tabs, privacy badge), parsing progress screen, setup (who-are-you multi-select with search, year picker incl. All time, skipped-file warnings), Instagram-style story player (tap/hold/swipe/keys, progress segments, slide transitions), 8 cards on a 1080×1920 canvas, PNG export via html-to-image (share sheet or download), save-all zip. Smoke-tested in headless Chromium at 390×844: no console errors, zero external requests.
 - Phase 5: Instagram JSON parser — tree search by file name (current + 2022 layouts + loose files/folders), message_N.json threads merged, mojibake fix, likes/saved/story/comments in classic, string_map_data and 2024+ label_values shapes, profile → auto "me", message requests skipped, HTML exports warned.
 - Phase 6: demo mode — seeded synthetic WhatsApp (4 formats, 5 people, 2 groups) + Instagram export generated in the worker and parsed by the real pipeline; fills all 8 cards ("Night Owl Yapper"). 64 tests passing.
+- Phase 7: README (pitch, preview image, privacy, export steps Android/iPhone/Instagram, dev, platform guide, 5 good first issues), CONTRIBUTING.md, GitHub Pages deploy workflow, vercel.json with CSP + security headers, OG image. PNG export verified in Chromium (single + zip, 1080×1920).
 
 ## In progress
-- Phase 7: README + deploy workflow
+- Self-review pass
 
 ## Next
 - self-review pass (bugs, mobile layout, network calls), MORNING.md

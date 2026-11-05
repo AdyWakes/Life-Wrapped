@@ -32,3 +32,5 @@ Choices made while building autonomously. Format: **what** — why (alternatives
 28. **Personality thresholds**: Yapper ≥ 100 messages/active day, Chatterbox ≥ 40, Minimalist < 8; Night Owl if ≥ 12% of your messages are sent 00:00–04:59 or the peak hour is 23:00–03:59. Tuned so the demo lands on the spec's "Night Owl Yapper".
 29. **"bhai", "yaar", "karte" etc. are treated as Hinglish stopwords** — they'd be #1 for almost every Indian user, which makes the card less personal. (Alternative: keep them — authentic but samey.)
 30. **Emoji display re-adds U+FE0F** to single BMP symbols (❤ → ❤️) so they render in colour; counting ignores the selector so ❤ and ❤️ are the same emoji.
+31. **Public URL assumed to be `https://adywakes.github.io/Life-Wrapped/`** (GitHub Pages default for this repo) — used for `og:image`/`og:url` and the README "Try it" link. Change both if you deploy to Vercel/custom domain.
+32. **README hero uses a static grid of the 8 demo cards** (`docs/cards-preview.jpg`, synthetic data) as the GIF placeholder; record a real GIF before launch.
