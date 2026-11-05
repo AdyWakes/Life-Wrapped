@@ -18,7 +18,8 @@ uss inko unko isko usko se par pe aur or ya bas sab kuch koi kaun kitna kitne ki
 abhi ab phir fir wala wali wale waala waali kar karo karna karke kiya kiye kari kr krna krke raha rahi rahe rha rhi rhe
 hua hui hue ga gi ge gya gaya gayi gyi diya dia de do dena lo le lena liya liye lia hoga hogi hoge hota hoti hote jaa ja
 jao jana jaana aa aao aaja aya aaya ayi aayi sakta sakti sakte skta skte wahi yahi waha yaha vaha yaha tak liye lie ek
-haa hn nd bhai yaar yr achha acha accha theek thik thk sahi`;
+haa hn nd bhai yaar yr achha acha accha theek thik thk sahi karte karta karti karenge karega karungi karunga
+rahe rahega rahi hoga kuchh kuch bhai log sir ji arre arey are re`;
 
 const HINDI = `है हैं था थी थे का की के को में मैं मे से पर और या भी ही तो न ना नहीं नही क्या क्यों कब कैसे कहाँ कहां जो जब तब
 यह ये वह वो इस उस इसे उसे इन उन मेरा मेरी मेरे तेरा तेरी तेरे तुम तू आप हम हमारा अपना अपनी अपने कुछ कोई सब बहुत अब

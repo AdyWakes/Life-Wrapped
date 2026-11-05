@@ -57,6 +57,12 @@ export function extractWords(
   return total;
 }
 
+/** Display form: put back VS16 on BMP symbols (❤ -> ❤️) so they render as colour emoji. */
+export function displayEmoji(e: string): string {
+  const cps = [...e];
+  return cps.length === 1 && cps[0]!.codePointAt(0)! < 0x1f000 ? e + '\uFE0F' : e;
+}
+
 export function topN<K>(map: Map<K, number>, n: number): { key: K; count: number }[] {
   return [...map.entries()]
     .sort((a, b) => b[1] - a[1])

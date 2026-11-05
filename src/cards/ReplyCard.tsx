@@ -45,7 +45,7 @@ export function ReplyCard({ stats, index, total }: CardProps) {
           )}
           {r.slowest && r.slowest.name !== r.fastest?.name && (
             <Reveal delay={0.95}>
-              <Row emoji="🫥" title="Leaves you on seen" name={r.slowest.name} value={durationShort(r.slowest.theirMedianMs!)} bg="rgba(0,0,0,0.25)" />
+              <Row emoji="👻" title="Leaves you on seen" name={r.slowest.name} value={durationShort(r.slowest.theirMedianMs!)} bg="rgba(0,0,0,0.25)" />
             </Reveal>
           )}
           {r.youLeaveOnSeen && (

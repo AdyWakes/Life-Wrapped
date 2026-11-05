@@ -45,12 +45,12 @@ export function computePersonality(s: WrappedStats): PersonalityStats | null {
   const mediaShare = t && t.sent ? t.mediaSent / t.sent : 0;
   let noun = 'Texter';
   if (!t || t.sent === 0) noun = ig && ig.likes > ig.dmsSent ? 'Double-Tapper' : 'Lurker';
-  else if (perDay >= 150) noun = 'Yapper';
+  else if (perDay >= 100) noun = 'Yapper';
   else if (words && words.avgWordsPerMessage >= 14) noun = 'Paragraph Texter';
   else if (mediaShare >= 0.25) noun = 'Meme Dealer';
   else if (words && words.emojiPerMessage >= 0.6) noun = 'Emoji Artist';
   else if (reply !== null && reply < 60_000) noun = 'Speed Texter';
-  else if (perDay >= 50) noun = 'Chatterbox';
+  else if (perDay >= 40) noun = 'Chatterbox';
   else if (perDay < 8) noun = 'Minimalist';
 
   // ---- Traits ----

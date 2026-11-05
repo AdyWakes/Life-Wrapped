@@ -4,7 +4,7 @@ import { computeInstagram } from './instagram';
 import { computePersonality } from './personality';
 import { replyTimes } from './replies';
 import { longestRun, runToISO } from './streaks';
-import { extractEmojis, extractWords, topN } from './text';
+import { displayEmoji, extractEmojis, extractWords, topN } from './text';
 import type {
   Comparison,
   PeopleStats,
@@ -225,7 +225,7 @@ export function computeStats(ds: Dataset, opts: StatsOptions): WrappedStats {
   const words: WordStats | null =
     textSent > 0
       ? {
-          topEmojis: topN(emojiMap, 10).map(({ key, count }) => ({ emoji: key, count })),
+          topEmojis: topN(emojiMap, 10).map(({ key, count }) => ({ emoji: displayEmoji(key), count })),
           topWords: topN(wordMap, 12).map(({ key, count }) => ({ word: key, count })),
           totalEmojis: emojiTotal,
           uniqueEmojis: emojiMap.size,
@@ -286,7 +286,10 @@ export function computeStats(ds: Dataset, opts: StatsOptions): WrappedStats {
           myMedianMs,
           fastest: withTheirs[0] ?? null,
           slowest: withTheirs.length > 1 ? withTheirs[withTheirs.length - 1]! : null,
-          youLeaveOnSeen: withMine.length > 1 ? withMine[0]! : null,
+          youLeaveOnSeen:
+            withMine.length > 1
+              ? (withMine.find((x) => x.name !== (withTheirs.length > 1 ? withTheirs[withTheirs.length - 1]!.name : '')) ?? null)
+              : null,
           people: withTheirs.slice(0, 10),
         }
       : null;
