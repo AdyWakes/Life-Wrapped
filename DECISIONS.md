@@ -18,3 +18,9 @@ Choices made while building autonomously. Format: **what** — why (alternatives
 14. **Heatmap / 3am club use the messages *you* sent** (falls back to all messages if "me" sent none). "Late night" = 00:00–04:59; "3am club" = 03:00–03:59.
 15. **Novel comparison** = words you sent / 90,000 words per novel; below half a novel we switch to short stories (7,500 words).
 16. **Default year** = the current calendar year if the data has any messages in it, otherwise the most recent year with data.
+17. **Cards are designed on a fixed 1080×1920 canvas** and CSS-scaled into the viewport. The PNG export re-renders the same component off-screen in a static "export" mode (no animations) at 1:1, so what you see is exactly what you download. (Alternative: snapshot the on-screen scaled card — blurry and mid-animation.)
+18. **Only latin + latin-ext font subsets are self-hosted** (custom `src/fonts.css`) so html-to-image embeds ~200KB per export instead of every subset. Devanagari & emoji use system fonts, which the browser also uses when rasterising the SVG.
+19. **Safari/WebKit export renders the SVG three times** (known html-to-image issue where fonts/emoji only appear from the second paint).
+20. **Share button uses the Web Share API with the PNG file** where supported (mobile Chrome/Safari → Instagram Stories / WhatsApp Status in one tap); falls back to a download. "Save all" zips every card with JSZip.
+21. **No `accept` attribute on the file input** — some iOS versions grey out WhatsApp's .zip/.txt with certain accept values. Files are validated after picking instead.
+22. **Story gestures**: tap left 30% = back, right 70% = next, hold = pause, horizontal swipe = next/prev, swipe down = close; arrow keys/space/esc on desktop. Auto-advance 7–10s per card.

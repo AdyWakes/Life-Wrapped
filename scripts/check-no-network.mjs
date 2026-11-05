@@ -63,6 +63,11 @@ if (existsSync(dist)) {
     'https://www.whatsapp.com',
     'https://accountscenter.instagram.com',
     'https://help.instagram.com',
+    // Inert license / docs strings inside JSZip + pako (never requested):
+    'http://stuartk.com/jszip',
+    'https://raw.github.com/Stuk/jszip/',
+    'https://github.com/nodeca/pako/',
+    'https://stuk.github.io/jszip/',
   ];
   const urlRe = /https?:\/\/[a-zA-Z0-9.-]+[^\s"'`)<>]*/g;
   for (const file of walk(dist, ['.js', '.html', '.css'])) {

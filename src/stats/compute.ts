@@ -331,7 +331,11 @@ function comparison(words: number): Comparison {
     const v = Math.round(stories * 10) / 10;
     return { value: v, unit: 'short stories', blurb: `That's ${v} short stories worth of words` };
   }
-  return { value: words, unit: 'words', blurb: `That's ${words.toLocaleString('en-US')} words — a whole short story` };
+  if (words >= 1000) {
+    const essays = Math.round((words / 1000) * 10) / 10;
+    return { value: essays, unit: 'essays', blurb: `That's ${essays} school essays worth of words` };
+  }
+  return { value: words, unit: 'words', blurb: `${words.toLocaleString()} words. Short and sweet` };
 }
 
 function emptyHeatmap(): number[][] {

@@ -60,19 +60,19 @@ export function computePersonality(s: WrappedStats): PersonalityStats | null {
   if (p && !p.fromGroups && p.top[0] && p.topShare >= 0.35) {
     add('🫶', 'Ride or Die', `${Math.round(p.topShare * 100)}% of your 1:1 chats were with ${p.top[0].name}`);
   }
-  if (time && time.threeAm >= 25) add('🌙', '3am Philosopher', `${time.threeAm.toLocaleString('en-US')} messages sent between 3 and 4am`);
+  if (time && time.threeAm >= 25) add('🌙', '3am Philosopher', `${time.threeAm.toLocaleString()} messages sent between 3 and 4am`);
   if (reply !== null && reply < 120_000) add('⚡', 'Lightning Replier', `You reply in ${fmtShort(reply)} on average`);
   if (reply !== null && reply > 3_600_000) add('👻', 'Leaves on Seen', `Your median reply takes ${fmtShort(reply)}`);
-  if (words && words.emojiPerMessage >= 0.5) add('🎨', 'Emoji Maximalist', `${words.totalEmojis.toLocaleString('en-US')} emojis sent`);
+  if (words && words.emojiPerMessage >= 0.5) add('🎨', 'Emoji Maximalist', `${words.totalEmojis.toLocaleString()} emojis sent`);
   if (s.streak && s.streak.days >= 30) add('🔥', 'Streak Keeper', `${s.streak.days} days straight with ${s.streak.name}`);
   if (t && t.received > 0 && t.sent / t.received >= 1.4) add('🎤', 'Main Character', 'You send way more than you receive');
   if (t && t.received > 0 && t.sent / t.received <= 0.6) add('👀', 'Quiet Observer', 'You read more than you write');
   if (p && p.topGroup && t && p.topGroup.total >= t.exchanged * 0.4) add('👑', 'Group Chat Royalty', `${p.topGroup.title} was your main stage`);
   if (p && p.uniquePeople >= 25) add('🦋', 'Social Butterfly', `You talked to ${p.uniquePeople} people`);
-  if (t && t.laughsSent >= 500) add('😂', 'Easily Amused', `You laughed in text ${t.laughsSent.toLocaleString('en-US')} times`);
+  if (t && t.laughsSent >= 500) add('😂', 'Easily Amused', `You laughed in text ${t.laughsSent.toLocaleString()} times`);
   if (t && t.deletedSent >= 20) add('🫣', 'Second Thoughts', `${t.deletedSent} messages deleted`);
-  if (ig && ig.likes >= 1000) add('❤️', 'Double-Tap Addict', `${ig.likes.toLocaleString('en-US')} posts liked`);
-  if (ig && ig.stories >= 100) add('👁️', 'Story Stalker', `${ig.stories.toLocaleString('en-US')} story interactions`);
+  if (ig && ig.likes >= 1000) add('❤️', 'Double-Tap Addict', `${ig.likes.toLocaleString()} posts liked`);
+  if (ig && ig.stories >= 100) add('👁️', 'Story Stalker', `${ig.stories.toLocaleString()} story interactions`);
   if (traits.length < 3 && t && t.sent > 0) add('💬', 'Consistent', `Active on ${t.activeDays} days`);
   if (traits.length < 3 && time) add('⏰', `Peak at ${fmtHour(time.peakHour)}`, 'Your busiest hour');
 
@@ -94,7 +94,7 @@ function buildTagline(s: WrappedStats, adjective: string): string {
           ? 'mostly in the evenings'
           : 'mostly during the day';
   const who = top && !s.people?.fromGroups ? `, and ${top.name} got the most of them` : '';
-  return `${t.sent.toLocaleString('en-US')} messages, ${when}${who}.`;
+  return `${t.sent.toLocaleString()} messages, ${when}${who}.`;
 }
 
 export function fmtHour(h: number): string {
