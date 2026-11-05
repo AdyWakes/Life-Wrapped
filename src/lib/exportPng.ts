@@ -36,10 +36,19 @@ async function withOffscreen<T>(element: ReactElement, fn: (node: HTMLElement) =
   }
 }
 
+/**
+ * Fetch + inline the (self-hosted) fonts once, right after page load, so exporting works even if
+ * the user goes offline / into airplane mode after opening the page.
+ */
+export function warmExport() {
+  fontCSS ??= getFontEmbedCSS(document.body).catch(() => '');
+}
+
 export async function renderCardBlob(card: CardDef, stats: WrappedStats, index: number, total: number): Promise<Blob> {
   const element = createElement(card.Component, { stats, index, total });
   return withOffscreen(element, async (node) => {
     fontCSS ??= getFontEmbedCSS(node).catch(() => '');
+    if (!(await fontCSS)) fontCSS = getFontEmbedCSS(node).catch(() => '');
     const options = {
       width: CARD_W,
       height: CARD_H,
@@ -91,8 +100,10 @@ export async function shareBlob(blob: Blob, fileName: string, text: string): Pro
   return true;
 }
 
+/** Only offer the share sheet on touch devices; desktops get a plain download. */
 export function canShareFiles(): boolean {
   try {
+    if (!window.matchMedia?.('(pointer: coarse)').matches) return false;
     const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
     const probe = new File([new Uint8Array([0])], 'x.png', { type: 'image/png' });
     return !!nav.share && !!nav.canShare?.({ files: [probe] });

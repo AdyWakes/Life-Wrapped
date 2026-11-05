@@ -169,7 +169,8 @@ export interface DemoFile {
 
 export function generateDemoFiles(now: Date = new Date(), seed = 2026): DemoFile[] {
   const rnd = mulberry32(seed);
-  const year = now.getFullYear();
+  // In Jan/Feb people are wrapping *last* year, so generate a full previous year.
+  const year = now.getMonth() <= 1 ? now.getFullYear() - 1 : now.getFullYear();
   const start = new Date(year, 0, 1).getTime();
   const end = Math.min(now.getTime(), new Date(year, 11, 31, 23, 59).getTime());
   const days = Math.max(30, Math.floor((end - start) / 86_400_000));

@@ -22,6 +22,7 @@ export class ParserClient {
       if (msg.type === 'error') p.reject(new Error(msg.message));
       else if (msg.type === 'parsed') p.resolve(msg.summary as never);
       else if (msg.type === 'stats') p.resolve(msg.stats as never);
+      else if (msg.type === 'cleared') p.resolve(undefined as never);
     };
     this.worker.onerror = (e) => {
       for (const p of this.pending.values()) p.reject(new Error(e.message || 'Worker crashed'));
@@ -48,6 +49,11 @@ export class ParserClient {
 
   compute(options: StatsOptions): Promise<WrappedStats> {
     return this.send({ type: 'compute', options });
+  }
+
+  /** Forget the parsed data (it only ever lived in this tab's memory). */
+  clear(): Promise<void> {
+    return this.send({ type: 'clear' });
   }
 
   terminate() {

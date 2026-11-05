@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { APP_NAME, REPO_SHORT } from '../lib/config';
 
@@ -43,9 +43,48 @@ export function CardFrame({ background, ink = '#fff', label, index, total, decor
             {String(index).padStart(2, '0')}/{String(total).padStart(2, '0')}
           </span>
         </div>
-        <div className="relative flex min-h-0 flex-1 flex-col">{children}</div>
+        <FitBox>{children}</FitBox>
       </div>
       <Watermark note={footerNote} />
+    </div>
+  );
+}
+
+/** Shrinks its content uniformly if it would overflow (long names, lots of data) — never clips. */
+function FitBox({ children }: { children: ReactNode }) {
+  const outer = useRef<HTMLDivElement>(null);
+  const inner = useRef<HTMLDivElement>(null);
+  const [k, setK] = useState(1);
+  useLayoutEffect(() => {
+    const o = outer.current;
+    const i = inner.current;
+    if (!o || !i) return;
+    const measure = () => {
+      const avail = o.clientHeight;
+      const need = i.scrollHeight;
+      const next = need > avail + 1 ? Math.max(0.6, avail / need) : 1;
+      setK((cur) => (Math.abs(cur - next) > 0.01 ? next : cur));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(i);
+    return () => ro.disconnect();
+  }, []);
+  return (
+    <div ref={outer} className="relative min-h-0 flex-1">
+      <div
+        ref={inner}
+        className="absolute left-0 top-0 flex flex-col"
+        style={{
+          // Width stays fixed so the layout (and therefore the measurement) doesn't depend on k.
+          width: '100%',
+          minHeight: `${100 / k}%`,
+          transform: k === 1 ? undefined : `scale(${k})`,
+          transformOrigin: 'top center',
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 }

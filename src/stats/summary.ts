@@ -40,7 +40,9 @@ export function summarize(ds: Dataset, now: Date = new Date()): DatasetSummary {
 
   const yearList = [...years.entries()].sort((a, b) => b[0] - a[0]).map(([year, count]) => ({ year, count }));
   const current = now.getFullYear();
-  const defaultYear: number | 'all' = years.has(current) ? current : (yearList[0]?.year ?? current);
+  let defaultYear: number | 'all' = years.has(current) ? current : (yearList[0]?.year ?? current);
+  // Wrapped season spills into January/February: if last year has more data, show last year.
+  if (now.getMonth() <= 1 && (years.get(current - 1) ?? 0) > (years.get(current) ?? 0)) defaultYear = current - 1;
 
   return {
     chatCount: ds.chats.length,

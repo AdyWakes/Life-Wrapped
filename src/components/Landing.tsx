@@ -80,10 +80,10 @@ export function Landing({ onFiles, onDemo, error }: Props) {
                 initial={{ opacity: 0, y: 40, rotate: 0 }}
                 animate={{ opacity: 1, y: 0, rotate: p.rot }}
                 transition={{ delay: 0.2 + i * 0.12, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute top-0 flex h-[280px] w-[158px] flex-col justify-end rounded-2xl p-3 shadow-2xl"
-                style={{ left: `${i * 110}px`, background: p.bg, zIndex: i === 1 ? 2 : 1 }}
+                className="absolute top-0 flex h-[280px] w-[158px] flex-col justify-end overflow-hidden rounded-2xl p-3 shadow-2xl"
+                style={{ left: `${i * 110}px`, background: p.bg, zIndex: i + 1 }}
               >
-                <div className="font-display text-2xl font-extrabold leading-none">{p.big}</div>
+                <div className="max-w-[100px] font-display text-xl font-extrabold leading-none">{p.big}</div>
                 <div className="mt-1 text-[11px] font-semibold opacity-85">{p.small}</div>
                 <div className="mt-3 text-[8px] font-bold opacity-70">lifewrapped</div>
               </motion.div>

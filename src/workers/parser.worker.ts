@@ -20,6 +20,7 @@ self.onmessage = async (e: MessageEvent<WorkerRequest>) => {
   const req = e.data;
   try {
     if (req.type === 'parse' || req.type === 'demo') {
+      dataset = null; // drop the previous upload before reading the next one
       const files = req.type === 'demo' ? generateDemoFiles() : req.files;
       const localeHint = req.type === 'parse' ? req.localeHint : 'en-IN';
       let last = 0;
@@ -33,6 +34,9 @@ self.onmessage = async (e: MessageEvent<WorkerRequest>) => {
         },
       });
       post({ type: 'parsed', id: req.id, summary: summarize(dataset) });
+    } else if (req.type === 'clear') {
+      dataset = null;
+      post({ type: 'cleared', id: req.id });
     } else if (req.type === 'compute') {
       if (!dataset) throw new Error('No data loaded');
       post({ type: 'stats', id: req.id, stats: computeStats(dataset, req.options) });

@@ -5,6 +5,7 @@ import { Setup } from './components/Setup';
 import { Story } from './components/Story';
 import { ParserClient } from './workers/client';
 import { buildCards } from './cards/registry';
+import { warmExport } from './lib/exportPng';
 import type { CardDef } from './cards/types';
 import type { DatasetSummary } from './types';
 import type { WrappedStats } from './stats/types';
@@ -27,7 +28,17 @@ export default function App() {
   const [isDemo, setIsDemo] = useState(false);
 
   const getClient = () => (client.current ??= new ParserClient());
-  useEffect(() => () => client.current?.terminate(), []);
+  useEffect(() => {
+    // Load the worker script and export fonts up front, so everything keeps working offline
+    // (airplane mode) once the page has loaded.
+    getClient();
+    const warm = () => document.fonts?.ready.then(warmExport);
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => number };
+    if (w.requestIdleCallback) w.requestIdleCallback(warm);
+    else window.setTimeout(warm, 1500);
+    return () => client.current?.terminate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const play = useCallback(async (me: string[], year: number | 'all', sum?: DatasetSummary) => {
     setBusy(true);
@@ -54,9 +65,6 @@ export default function App() {
 
   const load = useCallback(
     async (kind: 'files' | 'demo', files?: File[]) => {
-      // Fresh worker per load so old data is dropped from memory.
-      client.current?.terminate();
-      client.current = null;
       setStats(null);
       setChoice(null);
       setNotice(null);
@@ -72,6 +80,9 @@ export default function App() {
         }
         setView({ name: 'setup' });
       } catch (err) {
+        // A crashed worker can't be reused; the next attempt gets a fresh one.
+        client.current?.terminate();
+        client.current = null;
         setView({ name: 'landing', error: `Couldn’t read those files: ${err instanceof Error ? err.message : String(err)}` });
       }
     },
@@ -79,8 +90,7 @@ export default function App() {
   );
 
   const reset = () => {
-    client.current?.terminate();
-    client.current = null;
+    void getClient().clear().catch(() => {});
     setSummary(null);
     setStats(null);
     setView({ name: 'landing' });

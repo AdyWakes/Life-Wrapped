@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { CardDef } from '../cards/types';
 import type { WrappedStats } from '../stats/types';
@@ -22,7 +22,8 @@ export function Story({ cards, stats, onClose }: Props) {
   const [toast, setToast] = useState<string | null>(null);
   const [finished, setFinished] = useState(false);
   const progressRef = useRef(0);
-  const [, force] = useState(0);
+  const activeBar = useRef<HTMLDivElement>(null);
+  const blobCache = useRef(new Map<number, Blob>());
   const areaRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.3);
   const shareable = useRef(canShareFiles()).current;
@@ -58,13 +59,14 @@ export function Story({ cards, stats, onClose }: Props) {
       progressRef.current = 0;
       setDir(delta);
       setIndex(Math.max(0, next));
-      force((n) => n + 1);
+      if (activeBar.current) activeBar.current.style.width = '0%';
     },
     [cards.length],
   );
 
-  // ---- auto-advance timer ----
+  // ---- auto-advance timer (writes the bar width straight to the DOM: no re-render per frame) ----
   useEffect(() => {
+    if (activeBar.current) activeBar.current.style.width = `${Math.min(100, progressRef.current * 100)}%`;
     if (holding || finished) return;
     let raf = 0;
     let last = performance.now();
@@ -77,12 +79,12 @@ export function Story({ cards, stats, onClose }: Props) {
         go(1);
         return;
       }
-      force((n) => (n + 1) % 1_000_000);
+      if (activeBar.current) activeBar.current.style.width = `${progressRef.current * 100}%`;
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [holding, finished, card, go]);
+  }, [holding, finished, card, go, index]);
 
   // ---- keyboard ----
   useEffect(() => {
@@ -139,15 +141,30 @@ export function Story({ cards, stats, onClose }: Props) {
 
   const exportCurrent = async () => {
     if (busy) return;
-    setBusy('Rendering image…');
+    const name = cardFileName(card, index + 1, stats);
+    const text = `My ${stats.yearLabel} wrapped ✨ Make yours: ${REPO_SHORT}`;
+    let blob = blobCache.current.get(index);
     try {
-      const blob = await renderCardBlob(card, stats, index + 1, cards.length);
-      const name = cardFileName(card, index + 1, stats);
-      const shared = shareable && (await shareBlob(blob, name, `My ${stats.yearLabel} wrapped ✨ Make yours: ${REPO_SHORT}`));
-      if (!shared) {
-        downloadBlob(blob, name);
-        flash('Saved PNG ✓');
+      if (!blob) {
+        setBusy('Rendering image…');
+        blob = await renderCardBlob(card, stats, index + 1, cards.length);
+        blobCache.current.set(index, blob);
       }
+      if (shareable) {
+        try {
+          if (await shareBlob(blob, name, text)) return;
+        } catch (err) {
+          // Safari drops the "user gesture" if rendering took too long. The image is cached now,
+          // so a second tap shares instantly.
+          if ((err as DOMException)?.name === 'NotAllowedError') {
+            flash('Image ready — tap Share again');
+            return;
+          }
+          throw err;
+        }
+      }
+      downloadBlob(blob, name);
+      flash('Saved PNG ✓');
     } catch (err) {
       console.error(err);
       flash('Couldn’t create the image — try again');
@@ -179,6 +196,7 @@ export function Story({ cards, stats, onClose }: Props) {
   };
 
   const Component = card.Component;
+  const cardElement = useMemo(() => <Component stats={stats} index={index + 1} total={cards.length} />, [Component, stats, index, cards.length]);
   const cardW = CARD_W * scale;
   const cardH = CARD_H * scale;
 
@@ -211,7 +229,7 @@ export function Story({ cards, stats, onClose }: Props) {
               style={{ width: cardW, height: cardH }}
             >
               <div style={{ width: CARD_W, height: CARD_H, transform: `scale(${scale})`, transformOrigin: 'top left' }}>
-                <Component stats={stats} index={index + 1} total={cards.length} />
+                {cardElement}
               </div>
             </motion.div>
           </AnimatePresence>
@@ -221,6 +239,7 @@ export function Story({ cards, stats, onClose }: Props) {
             {cards.map((c, i) => (
               <div key={c.id} className="h-[3px] flex-1 overflow-hidden rounded-full bg-white/35">
                 <div
+                  ref={i === index ? activeBar : undefined}
                   className="h-full rounded-full bg-white"
                   style={{ width: `${i < index ? 100 : i === index ? Math.min(100, progressRef.current * 100) : 0}%` }}
                 />

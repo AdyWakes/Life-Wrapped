@@ -16,7 +16,7 @@ export function PersonalityCard({ stats, index, total }: CardProps) {
   const line1 = w1!;
   const line2 = restWords.join(' ');
   const width = CARD_W - PAD * 2;
-  const size = Math.min(fitFont(line1, width, 200, 90, 0.6), fitFont(line2 || line1, width, 200, 90, 0.6));
+  const size = Math.min(fitFont(line1, width, 180, 90, 0.6), fitFont(line2 || line1, width, 180, 90, 0.6));
   const summary = [
     stats.totals && { k: 'messages', v: compact(stats.totals.sent) },
     stats.people?.top[0] && { k: '#1 person', v: shortName(stats.people.top[0].name, 10) },
@@ -42,12 +42,12 @@ export function PersonalityCard({ stats, index, total }: CardProps) {
     >
       <div className="flex flex-1 flex-col justify-center">
         <Reveal delay={0.1} scale={0.3} y={0}>
-          <div className="emoji" style={{ fontSize: 210, lineHeight: 1 }}>
+          <div className="emoji" style={{ fontSize: 160, lineHeight: 1 }}>
             {p.emoji}
           </div>
         </Reveal>
         <Reveal delay={0.3}>
-          <div style={{ fontSize: 48, fontWeight: 600, marginTop: 30, opacity: 0.92 }}>You are a</div>
+          <div style={{ fontSize: 46, fontWeight: 600, marginTop: 20, opacity: 0.92 }}>You are a</div>
         </Reveal>
         <Reveal delay={0.45} y={90}>
           <Big size={size} style={{ marginTop: 14, textShadow: '0 8px 40px rgba(0,0,0,0.18)' }}>
@@ -57,26 +57,26 @@ export function PersonalityCard({ stats, index, total }: CardProps) {
           </Big>
         </Reveal>
         <Reveal delay={0.7}>
-          <div style={{ fontSize: 40, fontWeight: 600, lineHeight: 1.3, marginTop: 36, opacity: 0.95 }}>{p.tagline}</div>
+          <div style={{ fontSize: 40, fontWeight: 600, lineHeight: 1.3, marginTop: 28, opacity: 0.95 }}>{p.tagline}</div>
         </Reveal>
-        <div className="grid grid-cols-2" style={{ gap: 22, marginTop: 54 }}>
+        <div className="grid grid-cols-2" style={{ gap: 20, marginTop: 40 }}>
           {p.traits.map((t, i) => (
             <Reveal key={t.label} delay={0.95 + i * 0.12}>
-              <div className="h-full rounded-[38px]" style={{ padding: '30px 32px', background: 'rgba(255,255,255,0.18)', border: '2px solid rgba(255,255,255,0.35)' }}>
-                <div className="emoji" style={{ fontSize: 56, lineHeight: 1 }}>
+              <div className="h-full rounded-[38px]" style={{ padding: '24px 28px', background: 'rgba(255,255,255,0.18)', border: '2px solid rgba(255,255,255,0.35)' }}>
+                <div className="emoji" style={{ fontSize: 48, lineHeight: 1 }}>
                   {t.emoji}
                 </div>
-                <div className="font-display" style={{ fontSize: 44, fontWeight: 800, marginTop: 14, lineHeight: 1.05 }}>
+                <div className="font-display" style={{ fontSize: 40, fontWeight: 800, marginTop: 10, lineHeight: 1.05 }}>
                   {t.label}
                 </div>
-                <div style={{ fontSize: 26, fontWeight: 500, marginTop: 10, opacity: 0.88, lineHeight: 1.3 }}>{t.reason}</div>
+                <div style={{ fontSize: 25, fontWeight: 500, marginTop: 8, opacity: 0.88, lineHeight: 1.3 }}>{t.reason}</div>
               </div>
             </Reveal>
           ))}
         </div>
         {summary.length > 0 && (
           <Reveal delay={1.5}>
-            <div className="flex justify-between rounded-[38px]" style={{ marginTop: 40, padding: '28px 36px', background: 'rgba(0,0,0,0.22)' }}>
+            <div className="flex justify-between rounded-[38px]" style={{ marginTop: 28, padding: '24px 36px', background: 'rgba(0,0,0,0.22)' }}>
               {summary.slice(0, 4).map((s) => (
                 <div key={s.k} className="text-center">
                   <div className="font-display" style={{ fontSize: 50, fontWeight: 800, lineHeight: 1.1 }}>

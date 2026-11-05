@@ -280,18 +280,16 @@ export function computeStats(ds: Dataset, opts: StatsOptions): WrappedStats {
   const withTheirs = judged.filter((r) => r.theirMedianMs !== null).sort((a, b) => a.theirMedianMs! - b.theirMedianMs!);
   const withMine = judged.filter((r) => r.myMedianMs !== null).sort((a, b) => b.myMedianMs! - a.myMedianMs!);
   const myMedianMs = allMine.length >= 5 ? median(allMine) : null;
+  // Only call someone out when the difference is real.
+  const fastest = withTheirs[0] ?? null;
+  const slowestCand = withTheirs.length > 1 ? withTheirs[withTheirs.length - 1]! : null;
+  const slowest =
+    slowestCand && fastest && slowestCand.theirMedianMs! >= Math.max(fastest.theirMedianMs! * 1.5, 5 * 60_000) ? slowestCand : null;
+  const leaveCand = withMine.find((x) => x.name !== slowest?.name) ?? null;
+  const youLeaveOnSeen = withMine.length > 1 && leaveCand && leaveCand.myMedianMs! >= 10 * 60_000 ? leaveCand : null;
   const replies: ReplyStats | null =
     withTheirs.length || myMedianMs !== null
-      ? {
-          myMedianMs,
-          fastest: withTheirs[0] ?? null,
-          slowest: withTheirs.length > 1 ? withTheirs[withTheirs.length - 1]! : null,
-          youLeaveOnSeen:
-            withMine.length > 1
-              ? (withMine.find((x) => x.name !== (withTheirs.length > 1 ? withTheirs[withTheirs.length - 1]!.name : '')) ?? null)
-              : null,
-          people: withTheirs.slice(0, 10),
-        }
+      ? { myMedianMs, fastest, slowest, youLeaveOnSeen, people: withTheirs.slice(0, 10) }
       : null;
 
   const stats: WrappedStats = {

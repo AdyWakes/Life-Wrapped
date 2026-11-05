@@ -34,3 +34,9 @@ Choices made while building autonomously. Format: **what** — why (alternatives
 30. **Emoji display re-adds U+FE0F** to single BMP symbols (❤ → ❤️) so they render in colour; counting ignores the selector so ❤ and ❤️ are the same emoji.
 31. **Public URL assumed to be `https://adywakes.github.io/Life-Wrapped/`** (GitHub Pages default for this repo) — used for `og:image`/`og:url` and the README "Try it" link. Change both if you deploy to Vercel/custom domain.
 32. **README hero uses a static grid of the 8 demo cards** (`docs/cards-preview.jpg`, synthetic data) as the GIF placeholder; record a real GIF before launch.
+33. **One long-lived worker** (created on page load, `clear` message on "start over") instead of a fresh worker per upload — so the worker script is already loaded and the app keeps working in airplane mode. Export fonts are pre-inlined on idle for the same reason. Verified with Playwright offline emulation.
+34. **Story progress bar is driven by a rAF loop writing straight to the DOM**, and the card element is memoised, so cards don't re-render 60×/s on phones.
+35. **Cards auto-shrink (`FitBox`, min 60%) instead of clipping** when content is taller than the canvas (long names, lots of traits).
+36. **Reply card only calls someone out when it's meaningful**: "leaves you on seen" needs ≥1.5× the fastest replier and ≥5 min; "you leave on seen" needs ≥10 min.
+37. **Share sheet only on touch devices** (`pointer: coarse`); desktop gets a direct download. If iOS Safari rejects `navigator.share` because rendering took too long (lost user gesture), the PNG is cached and the user is told to tap Share again.
+38. **In January/February the default year (and demo data) is the previous year** if it has more data — people keep wrapping last year into the new year.

@@ -162,3 +162,18 @@ describe('summarize', () => {
     expect(s.defaultYear).toBe(2026); // current year has no data -> most recent year
   });
 });
+
+describe('default year', () => {
+  const at2 = (y: number, m: number) => new Date(y, m - 1, 10).getTime();
+  const c = {
+    id: 'x', platform: 'whatsapp' as const, title: 'A', isGroup: false, participants: ['A', 'B'], sourceFile: 'a.txt', notMeHints: [], meHints: [],
+    messages: [
+      ...Array.from({ length: 50 }, () => ({ ts: at2(2026, 6), sender: 'A', kind: 'text' as const, text: 'hi' })),
+      { ts: at2(2027, 1), sender: 'B', kind: 'text' as const, text: 'hny' },
+    ],
+  };
+  it('prefers last year in January when it has more data', () => {
+    expect(summarize({ chats: [c], instagram: null, warnings: [] }, new Date(2027, 0, 15)).defaultYear).toBe(2026);
+    expect(summarize({ chats: [c], instagram: null, warnings: [] }, new Date(2027, 5, 15)).defaultYear).toBe(2027);
+  });
+});
