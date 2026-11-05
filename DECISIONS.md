@@ -40,3 +40,5 @@ Choices made while building autonomously. Format: **what** — why (alternatives
 36. **Reply card only calls someone out when it's meaningful**: "leaves you on seen" needs ≥1.5× the fastest replier and ≥5 min; "you leave on seen" needs ≥10 min.
 37. **Share sheet only on touch devices** (`pointer: coarse`); desktop gets a direct download. If iOS Safari rejects `navigator.share` because rendering took too long (lost user gesture), the PNG is cached and the user is told to tap Share again.
 38. **In January/February the default year (and demo data) is the previous year** if it has more data — people keep wrapping last year into the new year.
+39. **"Save all" on phones shares all PNGs in one share sheet** ("Save 8 images" to Photos, or straight to Stories) instead of a zip, which is awkward on iOS/Android. Desktop (and share targets that refuse multiple files) still get a zip.
+40. **Folder picker hidden on touch devices** — `webkitdirectory` doesn't exist on mobile.

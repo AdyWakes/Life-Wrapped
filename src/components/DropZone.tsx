@@ -9,6 +9,8 @@ export function DropZone({ onFiles }: Props) {
   const input = useRef<HTMLInputElement>(null);
   const folder = useRef<HTMLInputElement>(null);
   const [over, setOver] = useState(false);
+  // Folder picking only exists on desktop browsers.
+  const [desktop] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: fine)').matches);
 
   const handle = (list: FileList | null) => {
     const files = list ? Array.from(list) : [];
@@ -40,9 +42,11 @@ export function DropZone({ onFiles }: Props) {
           or <span className="underline">tap to choose files</span> — WhatsApp .txt / .zip, Instagram .zip (JSON). Several at once is fine.
         </div>
       </button>
-      <button type="button" onClick={() => folder.current?.click()} className="mt-3 text-xs text-white/50 underline">
-        Already unzipped your Instagram export? Pick the folder
-      </button>
+      {desktop && (
+        <button type="button" onClick={() => folder.current?.click()} className="mt-3 text-xs text-white/50 underline">
+          Already unzipped your Instagram export? Pick the folder
+        </button>
+      )}
       <input ref={input} type="file" multiple hidden onChange={(e) => handle(e.target.files)} data-testid="file-input" />
       <input
         ref={folder}

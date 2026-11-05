@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import type { CardDef } from '../cards/types';
 import type { WrappedStats } from '../stats/types';
 import { CARD_H, CARD_W } from '../cards/kit';
-import { canShareFiles, cardFileName, downloadBlob, renderCardBlob, shareBlob, zipAllCards } from '../lib/exportPng';
+import { canShareFiles, cardFileName, downloadBlob, renderAllCards, renderCardBlob, shareBlob, shareBlobs, zipBlobs } from '../lib/exportPng';
 import { REPO_SHORT } from '../lib/config';
 
 interface Props {
@@ -175,14 +175,26 @@ export function Story({ cards, stats, onClose }: Props) {
 
   const exportAll = async () => {
     if (busy) return;
-    setBusy('Rendering 0/' + cards.length);
+    setBusy(`Rendering 1/${cards.length}`);
     try {
-      const zip = await zipAllCards(cards, stats, (d, t) => setBusy(`Rendering ${Math.min(d + 1, t)}/${t}`));
-      downloadBlob(zip, `lifewrapped-${stats.yearLabel.replace(/\s+/g, '-').toLowerCase()}.zip`);
+      const blobs = await renderAllCards(cards, stats, blobCache.current, (d, t) => setBusy(`Rendering ${Math.min(d + 1, t)}/${t}`));
+      const names = cards.map((c, i) => cardFileName(c, i + 1, stats));
+      if (shareable) {
+        try {
+          if (await shareBlobs(blobs, names, `My ${stats.yearLabel} wrapped ✨ Make yours: ${REPO_SHORT}`)) return;
+        } catch (err) {
+          if ((err as DOMException)?.name === 'NotAllowedError') {
+            flash('Images ready — tap Save all again');
+            return;
+          }
+          // Some share targets refuse many files: fall back to the zip below.
+        }
+      }
+      downloadBlob(await zipBlobs(blobs, names), `lifewrapped-${stats.yearLabel.replace(/\s+/g, '-').toLowerCase()}.zip`);
       flash('Saved all cards ✓');
     } catch (err) {
       console.error(err);
-      flash('Couldn’t create the zip — try again');
+      flash('Couldn’t create the images — try again');
     } finally {
       setBusy(null);
     }
@@ -269,7 +281,7 @@ export function Story({ cards, stats, onClose }: Props) {
               <div className="font-display text-3xl font-extrabold">That’s your {stats.yearLabel} ✨</div>
               <p className="max-w-xs text-sm text-white/75">Post your cards and tag your #1 person. Everything stayed on your device.</p>
               <button type="button" onClick={exportAll} className="mt-2 w-60 rounded-full bg-white px-5 py-3 font-bold text-black">
-                Save all cards (.zip)
+                {shareable ? 'Share all cards' : 'Save all cards (.zip)'}
               </button>
               <button type="button" onClick={restart} className="w-60 rounded-full border border-white/40 px-5 py-3 font-semibold">
                 Replay

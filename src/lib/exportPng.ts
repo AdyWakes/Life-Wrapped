@@ -112,17 +112,41 @@ export function canShareFiles(): boolean {
   }
 }
 
-export async function zipAllCards(
+export async function renderAllCards(
   cards: CardDef[],
   stats: WrappedStats,
+  cache: Map<number, Blob>,
   onProgress?: (done: number, total: number) => void,
-): Promise<Blob> {
-  const zip = new JSZip();
+): Promise<Blob[]> {
+  const out: Blob[] = [];
   for (let i = 0; i < cards.length; i++) {
     onProgress?.(i, cards.length);
-    const blob = await renderCardBlob(cards[i]!, stats, i + 1, cards.length);
-    zip.file(cardFileName(cards[i]!, i + 1, stats), blob);
+    let blob = cache.get(i);
+    if (!blob) {
+      blob = await renderCardBlob(cards[i]!, stats, i + 1, cards.length);
+      cache.set(i, blob);
+    }
+    out.push(blob);
   }
   onProgress?.(cards.length, cards.length);
+  return out;
+}
+
+/** Share several PNGs at once (mobile: "Save N images" to Photos). Returns false if unsupported. */
+export async function shareBlobs(blobs: Blob[], names: string[], text: string): Promise<boolean> {
+  const files = blobs.map((b, i) => new File([b], names[i]!, { type: 'image/png' }));
+  const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
+  if (!nav.share || !nav.canShare?.({ files })) return false;
+  try {
+    await nav.share({ files, text });
+  } catch (err) {
+    if ((err as DOMException)?.name !== 'AbortError') throw err;
+  }
+  return true;
+}
+
+export async function zipBlobs(blobs: Blob[], names: string[]): Promise<Blob> {
+  const zip = new JSZip();
+  blobs.forEach((b, i) => zip.file(names[i]!, b));
   return zip.generateAsync({ type: 'blob', compression: 'STORE' });
 }
