@@ -12,3 +12,9 @@ Choices made while building autonomously. Format: **what** — why (alternatives
 8. **"Me" hints** — the sender of "You deleted this message" is definitely the user; the contact in "WhatsApp Chat with X" and the sender of the iOS encryption notice in a 1:1 chat are definitely not. Used to pre-select "who are you?".
 9. **Lazy zip reader** (`src/parsers/zip.ts`) reads only the central directory + needed entries via `Blob.slice` and native `DecompressionStream('deflate-raw')`, with JSZip as fallback. Multi-GB Instagram exports with media would otherwise crash a phone's tab. (Alternative: JSZip only — simpler but loads the whole archive into RAM.)
 10. **Calls and system lines are not counted as messages**; deleted messages and media are counted as messages sent but excluded from word/emoji stats.
+11. **Top people come from 1:1 chats** (WhatsApp + Instagram merged by display name). Group members are only ranked when there are no 1:1 chats — otherwise loud group members would outrank your actual best friend. The biggest group gets a separate mention.
+12. **Streak = consecutive days where *both* of you sent at least one message** in a 1:1 chat — a one-sided "good morning" forward chain isn't "chatting". (Alternative: any message from either side — bigger numbers, less honest.)
+13. **Reply time = gap between the last message of their turn and the first of yours**, ignoring gaps > 24h (new conversation, not a reply). Medians, need ≥5 samples, only judged for your top 15 people.
+14. **Heatmap / 3am club use the messages *you* sent** (falls back to all messages if "me" sent none). "Late night" = 00:00–04:59; "3am club" = 03:00–03:59.
+15. **Novel comparison** = words you sent / 90,000 words per novel; below half a novel we switch to short stories (7,500 words).
+16. **Default year** = the current calendar year if the data has any messages in it, otherwise the most recent year with data.

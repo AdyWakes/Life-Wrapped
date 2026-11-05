@@ -9,3 +9,4 @@ coverage
 /private
 *.private.txt
 *.private.zip
+*.tsbuildinfo
